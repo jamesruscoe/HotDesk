@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body,
+html {
+    --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+/*
+ * HotDesk "Blueprint" theme: ink and navy, cyan for actions, amber for
+ * selection. Values are HSL triplets consumed by tailwind.config.js and the
+ * shadcn-style components. Raw hex values live under colors.bp.
+ */
+@layer base {
+    :root {
+        --background: 216 33% 97.6%;
+        --foreground: 215 62% 11%;
+        --card: 0 0% 100%;
+        --card-foreground: 215 62% 11%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 215 62% 11%;
+        --primary: 215 62% 11%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 214 33% 94%;
+        --secondary-foreground: 215 62% 11%;
+        --muted: 214 33% 94%;
+        --muted-foreground: 216 19% 44%;
+        --accent: 214 33% 94%;
+        --accent-foreground: 215 62% 11%;
+        --destructive: 0 72% 51%;
+        --destructive-foreground: 0 0% 100%;
+        --border: 215 28% 90%;
+        --input: 215 26% 86%;
+        --ring: 195 76% 60%;
+        --chart-1: 195 76% 60%;
+        --chart-2: 40 100% 65%;
+        --chart-3: 214 65% 17%;
+        --chart-4: 216 19% 44%;
+        --chart-5: 0 72% 51%;
+        --radius: 0.375rem;
+        --sidebar-background: 215 62% 11%;
+        --sidebar-foreground: 213 70% 95%;
+        --sidebar-primary: 195 76% 60%;
+        --sidebar-primary-foreground: 215 62% 11%;
+        --sidebar-accent: 214 65% 17%;
+        --sidebar-accent-foreground: 0 0% 100%;
+        --sidebar-border: 214 45% 20%;
+        --sidebar-ring: 195 76% 60%;
+    }
+
+    .dark {
+        --background: 215 62% 9%;
+        --foreground: 213 70% 95%;
+        --card: 214 60% 13%;
+        --card-foreground: 213 70% 95%;
+        --popover: 214 60% 13%;
+        --popover-foreground: 213 70% 95%;
+        --primary: 195 76% 60%;
+        --primary-foreground: 215 62% 11%;
+        --secondary: 214 50% 18%;
+        --secondary-foreground: 213 70% 95%;
+        --muted: 214 50% 16%;
+        --muted-foreground: 213 25% 68%;
+        --accent: 214 50% 18%;
+        --accent-foreground: 213 70% 95%;
+        --destructive: 0 72% 58%;
+        --destructive-foreground: 0 0% 100%;
+        --border: 214 45% 20%;
+        --input: 214 42% 24%;
+        --ring: 195 76% 60%;
+        --chart-1: 195 76% 60%;
+        --chart-2: 40 100% 65%;
+        --chart-3: 213 70% 95%;
+        --chart-4: 213 25% 68%;
+        --chart-5: 0 72% 58%;
+        --sidebar-background: 215 62% 7%;
+        --sidebar-foreground: 213 70% 95%;
+        --sidebar-primary: 195 76% 60%;
+        --sidebar-primary-foreground: 215 62% 11%;
+        --sidebar-accent: 214 50% 16%;
+        --sidebar-accent-foreground: 0 0% 100%;
+        --sidebar-border: 214 45% 18%;
+        --sidebar-ring: 195 76% 60%;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply bg-background text-foreground;
+    }
+}
+
+@layer components {
+    /* Small uppercase mono label used for eyebrows and field captions. */
+    .bp-label {
+        @apply font-mono text-[11px] font-medium uppercase tracking-[0.06em] text-muted-foreground;
+    }
+
+    /* The navy drawing-board grid, for thumbnails and backdrops. */
+    .bp-board {
+        background-color: theme('colors.bp.navy');
+        background-image:
+            linear-gradient(rgba(233, 241, 251, 0.06) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(233, 241, 251, 0.06) 1px, transparent 1px);
+        background-size: 16px 16px;
+    }
+}
