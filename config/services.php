@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'engine' => [
+        'url' => env('ENGINE_URL', 'http://127.0.0.1:8001'),
+        'token' => env('ENGINE_TOKEN'),
+    ],
+
 ];
