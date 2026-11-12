@@ -26,11 +26,7 @@ In the Laravel `.env`, set `ENGINE_URL=http://127.0.0.1:8001` and `ENGINE_TOKEN=
 The engine is its own Cloud application, deployed from the same repository as the Laravel app.
 
 1. **New application.** Pick this repository. When Cloud detects the monorepo, choose `engine` as the root directory.
-2. **Start command.** Cloud detects FastAPI from `uv.lock` and suggests a uvicorn command. Change it to:
-   ```
-   uvicorn app.main:app --host :: --port $PORT
-   ```
-   The pre-filled command usually says `main:app` and `--host ''`. Both are wrong here.
+2. **Start command.** Leave Cloud's pre-filled `uvicorn main:app --host '' --port $PORT`. The top-level `main.py` re-exports the app so that command finds it, and `--host ''` listens on IPv4 and IPv6.
 3. **Engine environment variables.** Set `ENGINE_TOKEN` to a long random secret.
 4. **Laravel app environment variables.** Set `ENGINE_URL` to the engine app's URL (`https://….laravel.cloud`) and `ENGINE_TOKEN` to the same secret. Then redeploy the Laravel app.
 5. **Check it.** Log in to the Laravel app and open `/engine-test`. All three calls should report status 200.
