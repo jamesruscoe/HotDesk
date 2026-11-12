@@ -20,7 +20,6 @@ use App\Models\Organization;
 use App\Models\User;
 use App\Services\BookingService;
 use Carbon\CarbonImmutable;
-use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -283,19 +282,6 @@ class BookingServiceTest extends TestCase
         $this->expectExceptionObject(BookingNotAllowedException::addOnUnavailable());
 
         $this->service->bookHours($this->desk, $this->user, $this->local('2026-10-05 10:00'), $this->local('2026-10-05 11:00'), $this->user, [$wifi->id]);
-    }
-
-    public function test_database_rejects_overlaps_that_bypass_the_service(): void
-    {
-        $start = $this->local('2026-10-05 10:00');
-        Booking::factory()->for($this->desk)->create(['starts_at' => $start, 'ends_at' => $start->addHours(2)]);
-
-        try {
-            Booking::factory()->for($this->desk)->create(['starts_at' => $start->addHour(), 'ends_at' => $start->addHours(3)]);
-            $this->fail('Expected the exclusion constraint to reject the overlap.');
-        } catch (QueryException $exception) {
-            $this->assertSame('23P01', $exception->getCode());
-        }
     }
 
     public function test_check_in_requires_the_setting_and_the_window(): void

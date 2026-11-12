@@ -22,7 +22,6 @@ use App\Models\User;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -31,15 +30,12 @@ use Illuminate\Support\Str;
  * row on one desk within one local day. Multi-day bookings are one row per
  * open day, linked by booking_group_id.
  *
- * Double bookings are prevented twice: a locked overlap check here that
- * produces a readable error, and a Postgres exclusion constraint that makes
- * an overlap impossible even if two requests race past the check.
+ * Double bookings are prevented by row-locking the desk before the overlap
+ * check, so concurrent requests for one desk run one after another. MySQL has
+ * no exclusion constraints, so every booking insert must go through here.
  */
 final class BookingService
 {
-    /** Postgres SQLSTATE for an exclusion constraint violation. */
-    private const EXCLUSION_VIOLATION = '23P01';
-
     public function __construct(
         private readonly LocationService $locationService,
         private readonly WorkingHoursService $workingHoursService,
@@ -356,28 +352,20 @@ final class BookingService
             $deskQuote->currency ?? $location->currency ?? $location->organization->currency,
         );
 
-        try {
-            $booking = Booking::query()->create([
-                'desk_id' => $desk->id,
-                'user_id' => $user->id,
-                'booking_group_id' => $groupId,
-                'type' => $type,
-                'status' => BookingStatus::CONFIRMED,
-                'starts_at' => $start,
-                'ends_at' => $end,
-                'price_cents' => $total->amountCents,
-                'currency' => $total->isFree() ? null : $total->currency,
-                'payment_status' => $this->paymentService->initialStatusFor($total),
-                'created_by' => $actor->id,
-                'updated_by' => $actor->id,
-            ]);
-        } catch (QueryException $exception) {
-            if ($exception->getCode() === self::EXCLUSION_VIOLATION) {
-                throw BookingConflictException::deskTaken();
-            }
-
-            throw $exception;
-        }
+        $booking = Booking::query()->create([
+            'desk_id' => $desk->id,
+            'user_id' => $user->id,
+            'booking_group_id' => $groupId,
+            'type' => $type,
+            'status' => BookingStatus::CONFIRMED,
+            'starts_at' => $start,
+            'ends_at' => $end,
+            'price_cents' => $total->amountCents,
+            'currency' => $total->isFree() ? null : $total->currency,
+            'payment_status' => $this->paymentService->initialStatusFor($total),
+            'created_by' => $actor->id,
+            'updated_by' => $actor->id,
+        ]);
 
         $booking->addOns()->saveMany($lines);
 
