@@ -1,4 +1,4 @@
-from ridge_engine.slab.geometry import RectangularSlab
+from app.slab.geometry import RectangularSlab
 
 
 def grid(slab: RectangularSlab, divisions: int) -> list[tuple[float, float]]:

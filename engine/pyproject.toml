@@ -1,5 +1,5 @@
 [project]
-name = "ridge-engine"
+name = "engine"
 version = "0.1.0"
 description = "Structural calculation engine served over FastAPI."
 requires-python = ">=3.12"

@@ -1,4 +1,4 @@
-# Ridge engine
+# Engine
 
 FastAPI service for structural calculations, called by the Laravel app over HTTP.
 
@@ -15,7 +15,7 @@ Every endpoint except `/health` needs `Authorization: Bearer $ENGINE_TOKEN`. If 
 ```sh
 cd engine
 uv sync
-ENGINE_TOKEN=local-token uv run uvicorn ridge_engine.main:app --port 8001 --reload
+ENGINE_TOKEN=local-token uv run uvicorn app.main:app --port 8001 --reload
 uv run pytest
 ```
 
@@ -28,7 +28,7 @@ The engine is its own Cloud application, deployed from the same repository as th
 1. **New application.** Pick this repository. When Cloud detects the monorepo, choose `engine` as the root directory.
 2. **Start command.** Cloud detects FastAPI from `uv.lock` and suggests a uvicorn command. Change it to:
    ```
-   uvicorn ridge_engine.main:app --host :: --port $PORT
+   uvicorn app.main:app --host :: --port $PORT
    ```
    The pre-filled command usually says `main:app` and `--host ''`. Both are wrong here.
 3. **Engine environment variables.** Set `ENGINE_TOKEN` to a long random secret.

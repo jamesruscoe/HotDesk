@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 
-from ridge_engine import beam
-from ridge_engine.slab import api as slab
+from app import beam
+from app.slab import api as slab
 
-app = FastAPI(title="Ridge engine")
+app = FastAPI(title="Engine")
 app.include_router(beam.router)
 app.include_router(slab.router)
 

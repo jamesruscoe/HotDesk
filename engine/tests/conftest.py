@@ -8,6 +8,6 @@ os.environ["ENGINE_TOKEN"] = "test-token"
 
 @pytest.fixture
 def client() -> TestClient:
-    from ridge_engine.main import app
+    from app.main import app
 
     return TestClient(app, headers={"Authorization": "Bearer test-token"})

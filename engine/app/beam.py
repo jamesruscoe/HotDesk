@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
 
-from ridge_engine import beam_theory
-from ridge_engine.security import require_token
+from app import beam_theory
+from app.security import require_token
 
 router = APIRouter(prefix="/beam", dependencies=[Depends(require_token)])
 

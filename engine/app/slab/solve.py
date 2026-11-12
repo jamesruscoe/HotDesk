@@ -1,8 +1,8 @@
 from math import pi, sin
 
-from ridge_engine.slab.contracts import SlabInput, SlabResult
-from ridge_engine.slab.geometry import RectangularSlab
-from ridge_engine.slab.mesh import grid
+from app.slab.contracts import SlabInput, SlabResult
+from app.slab.geometry import RectangularSlab
+from app.slab.mesh import grid
 
 # Odd terms up to 49 put the centre deflection well within 0.1% of the exact series.
 SERIES_TERMS = range(1, 50, 2)
